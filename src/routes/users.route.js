@@ -4,8 +4,11 @@ const id = require("../middlewares/id");
 
 const usersController = require("../controllers/users.controller");
 const asyncHandler = require("../utils/asyncHandler");
+const page = require("../middlewares/page");
 
 router.get("/", asyncHandler(usersController.getAll))
+
+router.get("/pagination", [page], asyncHandler(usersController.pagination))
 
 router.get("/test", asyncHandler(usersController.test))
 

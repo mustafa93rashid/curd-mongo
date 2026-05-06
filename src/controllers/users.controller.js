@@ -5,6 +5,26 @@ class UsersController {
     res.status(200).json({ data: users });
   };
 
+  pagination = async (req, res) => {
+const page = req._page;
+const limit = req._limit;
+    const skip = (page - 1) * limit;
+
+    const total = await User.countDocuments();
+    const Pages = Math.ceil(total / limit);
+
+    const data = await User
+    .find()
+    .limit(limit)
+    .skip(skip);
+
+    const isNext = page < Pages;
+    const isPrev = page > 1;
+
+    res.status(200).json({ total, Pages, data, isNext, isPrev });
+
+  };
+
   test = async (req, res) => {
     // const count = await User.countDocuments();
     // res.status(200).json({ data: count })
