@@ -2,7 +2,7 @@ const User = require("../models/User");
 class UsersController {
   getAll = async (req, res) => {
     const users = await User.find();
-    res.status(200).json({ data: users });
+    res.status(200).json({ data: users});
   };
 
   pagination = async (req, res) => {
@@ -34,6 +34,7 @@ const limit = req._limit;
 
 
       const users = await User.find().select("age -_id").where("age").gte(30);
+      const user = await User.findByAge(30);
 
       fn();
       res.status(200).json({ data: users });
@@ -45,8 +46,9 @@ const limit = req._limit;
     const user = await User.findById(id);
 
     if (!user) return res.status(404).json("This user Not found");
+    const skills = await user.skillsCount();
 
-    res.status(200).json({ data: user });
+    res.status(200).json({ data: user, skills  });
   };
 
   add = async (req, res) => {

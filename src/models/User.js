@@ -23,7 +23,29 @@ const userSchema = new mongoose.Schema({
             code: String,
             location: String,
     }
-}, { timestamps: true });
+}, { 
+    toJSON: { virtuals: true },
+    timestamps: true });
+
+// virtuals
+userSchema.virtual("birthDate").get(function() {
+    return new Date().getFullYear() - this.age  ;
+});
+
+// methods
+userSchema.methods.skillsCount = function() {
+    return this.skills.length;
+}
+
+// statics
+userSchema.statics.findByAge = function(age) {
+    return this.find().where("age").gte(age);
+}
+
+// query helpers
+userSchema.query.byActive = function(active) {
+    return this.where({ active });
+}
 
 const model = mongoose.model("User", userSchema)
 
